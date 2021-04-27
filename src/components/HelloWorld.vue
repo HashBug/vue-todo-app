@@ -1,42 +1,37 @@
 <template>
   <div class="hello">
-    <h1>{{ msg }}</h1>
-    <p>
-      For a guide and recipes on how to configure / customize this project,<br>
-      check out the
-      <a href="https://cli.vuejs.org" target="_blank" rel="noopener">vue-cli documentation</a>.
-    </p>
-    <h3>Installed CLI Plugins</h3>
-    <ul>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-babel" target="_blank" rel="noopener">babel</a></li>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-eslint" target="_blank" rel="noopener">eslint</a></li>
-    </ul>
-    <h3>Essential Links</h3>
-    <ul>
-      <li><a href="https://vuejs.org" target="_blank" rel="noopener">Core Docs</a></li>
-      <li><a href="https://forum.vuejs.org" target="_blank" rel="noopener">Forum</a></li>
-      <li><a href="https://chat.vuejs.org" target="_blank" rel="noopener">Community Chat</a></li>
-      <li><a href="https://twitter.com/vuejs" target="_blank" rel="noopener">Twitter</a></li>
-      <li><a href="https://news.vuejs.org" target="_blank" rel="noopener">News</a></li>
-    </ul>
-    <h3>Ecosystem</h3>
-    <ul>
-      <li><a href="https://router.vuejs.org" target="_blank" rel="noopener">vue-router</a></li>
-      <li><a href="https://vuex.vuejs.org" target="_blank" rel="noopener">vuex</a></li>
-      <li><a href="https://github.com/vuejs/vue-devtools#vue-devtools" target="_blank" rel="noopener">vue-devtools</a></li>
-      <li><a href="https://vue-loader.vuejs.org" target="_blank" rel="noopener">vue-loader</a></li>
-      <li><a href="https://github.com/vuejs/awesome-vue" target="_blank" rel="noopener">awesome-vue</a></li>
-    </ul>
+    <img :class="gender" :src="picture" :alt="`${firstName} ${lastName}`" />
+    <div>{{ firstName }} {{ lastName }}</div>
+    <button :class="gender" @click="getUser()">Get Random User</button>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'HelloWorld',
-  props: {
-    msg: String
-  }
-}
+  name: "HelloWorld",
+  props: {},
+  data() {
+    return {
+      firstName: "John",
+      lastName: "Doe",
+      email: "john.doe@gmail.com",
+      gender: "male",
+      picture: "https://randomuser.me/api/portraits/men/11.jpg",
+    };
+  },
+  methods: {
+    async getUser() {
+      const user = await fetch("https://randomuser.me/api");
+      const res = await user.json();
+      const { results } = res;
+      this.firstName = results[0].name.first;
+      this.lastName = results[0].name.last;
+      this.email = results[0].email;
+      this.gender = results[0].gender;
+      this.picture = results[0].picture.large;
+    },
+  },
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
@@ -54,5 +49,30 @@ li {
 }
 a {
   color: #42b983;
+}
+img {
+  border-radius: 50%;
+  align-content: center;
+}
+
+img.male {
+  border: 4px solid steelblue;
+}
+
+img.female {
+  border: 4px solid pink;
+}
+
+button {
+  padding: 0.3rem;
+  color: white;
+}
+
+button.male {
+  background: steelblue;
+}
+
+button.female {
+  background: pink;
 }
 </style>
